@@ -1,7 +1,7 @@
-package com.jordantuffery.henrypottier.presentation
+package com.jordantuffery.henrypottier.view.fragments
 
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.presentation.base.BaseFragment
+import com.jordantuffery.henrypottier.view.base.BaseFragment
 
 class ShoppingListFragment : BaseFragment() {
     override val layoutRes: Int = R.layout.fragment_shopping_list
@@ -11,4 +11,5 @@ class ShoppingListFragment : BaseFragment() {
             return ShoppingListFragment()
         }
     }
+
 }

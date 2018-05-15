@@ -1,9 +1,12 @@
-package com.jordantuffery.henrypottier.presentation
+package com.jordantuffery.henrypottier.view.activities
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import com.jordantuffery.henrypottier.R
+import com.jordantuffery.henrypottier.view.fragments.InfoFragment
+import com.jordantuffery.henrypottier.view.fragments.LibraryFragment
+import com.jordantuffery.henrypottier.view.fragments.ShoppingListFragment
 import kotlinx.android.synthetic.main.activity_main.main_activity_bottom_bar
 
 class MainActivity : AppCompatActivity() {
