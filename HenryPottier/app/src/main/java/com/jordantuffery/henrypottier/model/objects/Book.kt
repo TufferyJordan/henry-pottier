@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.model
+package com.jordantuffery.henrypottier.model.objects
 
 data class Book(val isbn: String,
                 val title: String,
