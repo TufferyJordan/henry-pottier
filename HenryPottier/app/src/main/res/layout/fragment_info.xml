@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
+    <TextView
+        style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary" />
+        android:gravity="center"
+        android:text="@string/title_info" />
 
 </android.support.constraint.ConstraintLayout>
