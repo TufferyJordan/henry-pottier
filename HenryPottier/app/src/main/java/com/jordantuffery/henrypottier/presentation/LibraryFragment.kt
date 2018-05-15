@@ -7,8 +7,8 @@ class LibraryFragment : BaseFragment() {
     override val layoutRes: Int = R.layout.fragment_library
 
     companion object {
-        fun newInstance(): InfoFragment {
-            return InfoFragment()
+        fun newInstance(): LibraryFragment {
+            return LibraryFragment()
         }
     }
 }
