@@ -5,7 +5,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.EventBusException
 import timber.log.Timber
 
-class BaseApplication: Application() {
+class BaseApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         try {
@@ -17,7 +17,7 @@ class BaseApplication: Application() {
             Timber.e(ignored)
         }
 
-        if(BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }
 
     override fun onTerminate() {

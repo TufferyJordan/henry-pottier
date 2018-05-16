@@ -3,8 +3,6 @@ package com.jordantuffery.henrypottier.model
 import com.jordantuffery.henrypottier.model.objects.Book
 import com.jordantuffery.henrypottier.model.objects.Offer
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 

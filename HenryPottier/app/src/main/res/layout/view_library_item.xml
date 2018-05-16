@@ -14,6 +14,16 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@color/colorPrimary" />
 
+    <ProgressBar
+        android:id="@+id/book_image_loading"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/book_image"
+        app:layout_constraintLeft_toLeftOf="@id/book_image"
+        app:layout_constraintRight_toRightOf="@id/book_image"
+        app:layout_constraintTop_toTopOf="@id/book_image" />
+
     <TextView
         android:id="@+id/book_title"
         style="@style/TextAppearance.AppCompat.Medium"
@@ -21,8 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         app:layout_constraintLeft_toRightOf="@+id/book_image"
-        app:layout_constraintTop_toTopOf="@+id/book_image"
         app:layout_constraintRight_toLeftOf="@+id/book_go_to_detail_button"
+        app:layout_constraintTop_toTopOf="@+id/book_image"
         tools:text="Title" />
 
     <TextView
@@ -31,20 +41,19 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        app:layout_constraintLeft_toRightOf="@+id/book_image"
-        app:layout_constraintTop_toBottomOf="@+id/book_title"
-        app:layout_constraintRight_toLeftOf="@+id/book_go_to_detail_button"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/book_image"
+        app:layout_constraintRight_toLeftOf="@+id/book_go_to_detail_button"
+        app:layout_constraintTop_toBottomOf="@+id/book_title"
         tools:text="synopsis" />
 
     <ImageView
         android:id="@+id/book_go_to_detail_button"
         android:layout_width="50dp"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_chevron_right_24px"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:src="@drawable/ic_chevron_right_24px"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

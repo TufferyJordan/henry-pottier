@@ -11,5 +11,4 @@ class ShoppingListFragment : BaseFragment() {
             return ShoppingListFragment()
         }
     }
-
 }

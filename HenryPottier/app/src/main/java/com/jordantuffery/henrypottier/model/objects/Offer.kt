@@ -6,7 +6,10 @@ data class Offer(val type: OfferType,
                  val value: Int)
 
 enum class OfferType {
-    @SerializedName("percentage")PERCENTAGE,
-    @SerializedName("minus")MINUS,
-    @SerializedName("slice")SLICE
+    @SerializedName("percentage")
+    PERCENTAGE,
+    @SerializedName("minus")
+    MINUS,
+    @SerializedName("slice")
+    SLICE
 }

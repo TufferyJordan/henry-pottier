@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_library.library_recycler_view
 class LibraryFragment : BaseFragment() {
     override val layoutRes: Int = R.layout.fragment_library
 
-    val adapter: LibraryAdapter = LibraryAdapter(ArrayList(0))
+    private val adapter: LibraryAdapter = LibraryAdapter(ArrayList(0))
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         library_recycler_view.adapter = adapter
