@@ -31,7 +31,8 @@ class ServiceConnector<T>(private val serviceClass: Class<T>) where T : Service 
      * @param connectionHandler Callback ran at service connection.
      */
     @JvmOverloads
-    fun bind(context: Context, extras: Bundle? = null, autoCreate: Boolean = true, connectionHandler: (T) -> Unit = {}) {
+    fun bind(context: Context, extras: Bundle? = null, autoCreate: Boolean = true,
+             connectionHandler: (T) -> Unit = {}) {
         service?.let {
             connectionHandler(it)
             return
