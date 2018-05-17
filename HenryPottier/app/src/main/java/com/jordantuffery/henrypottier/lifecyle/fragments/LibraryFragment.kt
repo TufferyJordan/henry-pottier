@@ -1,9 +1,9 @@
 package com.jordantuffery.henrypottier.lifecyle.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.jordantuffery.henrypottier.R
 import com.jordantuffery.henrypottier.lifecyle.DataRequestService
@@ -31,15 +31,19 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
         super.onDataRequestServiceConnected(dataRequestService)
         requestBooks()
     }
+
     private fun requestBooks() {
         dataRequestService?.requestBooks {
             adapter.itemList = it
             adapter.notifyDataSetChanged()
-            if(library_swipe_layout.isRefreshing) {library_swipe_layout.isRefreshing = false}
+            if (library_swipe_layout.isRefreshing) {
+                library_swipe_layout.isRefreshing = false
+            }
         }
     }
 
