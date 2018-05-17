@@ -30,7 +30,7 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         shopping_list_recycler_view.layoutManager = LinearLayoutManager(context)
         shopping_list_recycler_view.addItemDecoration(
-            DividerItemDecoration(shopping_list_recycler_view.context, DividerItemDecoration.HORIZONTAL))
+            DividerItemDecoration(shopping_list_recycler_view.context, DividerItemDecoration.VERTICAL))
         shopping_list_recycler_view.adapter = adapter
         shopping_list_text_old_price.paintFlags = shopping_list_text_old_price.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
     }
