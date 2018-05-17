@@ -15,9 +15,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.jordantuffery.henrypottier.R
 import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
-import kotlinx.android.synthetic.main.item_library.view.book_image
-import kotlinx.android.synthetic.main.item_library.view.book_image_loading
-import kotlinx.android.synthetic.main.item_library.view.book_title
+import kotlinx.android.synthetic.main.item_library.view.library_item_cover
+import kotlinx.android.synthetic.main.item_library.view.library_item_loading
+import kotlinx.android.synthetic.main.item_library.view.library_item_title
 
 class LibraryAdapter(var itemList: List<RetrofitBook>) : RecyclerView.Adapter<LibraryViewHolder>() {
     var listener: OnItemClickListener? = null
@@ -58,7 +58,7 @@ class LibraryAdapter(var itemList: List<RetrofitBook>) : RecyclerView.Adapter<Li
 }
 
 class LibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val bookCover: ImageView = itemView.book_image
-    val progressBar: ProgressBar = itemView.book_image_loading
-    val title: TextView = itemView.book_title
+    val bookCover: ImageView = itemView.library_item_cover
+    val progressBar: ProgressBar = itemView.library_item_loading
+    val title: TextView = itemView.library_item_title
 }

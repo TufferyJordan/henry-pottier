@@ -18,7 +18,7 @@ class MainActivity : BaseActivity() {
     private val libraryFragment = LibraryFragment.newInstance()
     private val shoppingListFragment = ShoppingListFragment.newInstance()
 
-    private var currentFragment: BaseFragment? = null
+    // private var currentFragment: BaseFragment? = null
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {

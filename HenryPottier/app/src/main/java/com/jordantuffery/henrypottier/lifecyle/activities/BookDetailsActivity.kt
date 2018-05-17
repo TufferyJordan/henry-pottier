@@ -1,5 +1,6 @@
 package com.jordantuffery.henrypottier.lifecyle.activities
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.jordantuffery.henrypottier.R
@@ -32,7 +33,7 @@ class BookDetailsActivity : BaseActivity() {
         fab_add_shopping_list.setOnClickListener {
             val bookToAdd = book
             if (bookToAdd != null) {
-                dataRequestService?.addBookToShoppingList(bookToAdd)
+                dataRequestService?.shoppingList?.addToShoppingList(bookToAdd)
                 setResult(RESULT_CODE_ADDED_ITEM_IN_LIST)
             } else {
                 setResult(RESULT_CODE_NONE)
@@ -41,6 +42,7 @@ class BookDetailsActivity : BaseActivity() {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
         super.onDataRequestServiceConnected(dataRequestService)
         val isbn = intent.extras.getString(LibraryFragment.EXTRA_BOOK_ISBN)
