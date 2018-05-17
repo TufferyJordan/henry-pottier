@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.view
+package com.jordantuffery.henrypottier.lifecyle
 
 import android.graphics.drawable.Drawable
 import android.support.v7.widget.RecyclerView
@@ -14,17 +14,20 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.model.objects.Book
-import kotlinx.android.synthetic.main.view_library_item.view.book_description
-import kotlinx.android.synthetic.main.view_library_item.view.book_go_to_detail_button
-import kotlinx.android.synthetic.main.view_library_item.view.book_image
-import kotlinx.android.synthetic.main.view_library_item.view.book_image_loading
-import kotlinx.android.synthetic.main.view_library_item.view.book_title
-import timber.log.Timber
+import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
+import kotlinx.android.synthetic.main.item_library.view.book_image
+import kotlinx.android.synthetic.main.item_library.view.book_image_loading
+import kotlinx.android.synthetic.main.item_library.view.book_title
 
-class LibraryAdapter(var itemList: List<Book>) : RecyclerView.Adapter<LibraryViewHolder>() {
+class LibraryAdapter(var itemList: List<RetrofitBook>) : RecyclerView.Adapter<LibraryViewHolder>() {
+    var listener: OnItemClickListener? = null
+        set(value) {
+            notifyDataSetChanged()
+            field = value
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LibraryViewHolder = LibraryViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.view_library_item, parent, false))
+        LayoutInflater.from(parent.context).inflate(R.layout.item_library, parent, false))
 
     override fun getItemCount(): Int = itemList.size
 
@@ -44,10 +47,13 @@ class LibraryAdapter(var itemList: List<Book>) : RecyclerView.Adapter<LibraryVie
             }
         }).into(holder.bookCover)
         holder.title.text = itemList[position].title
-        holder.synopsis.text = itemList[position].synopsis[0]
-        holder.button.setOnClickListener {
-            Timber.e("isbn : %s", itemList[position].isbn)
+        holder.itemView.setOnClickListener { view ->
+            listener?.onItemClick(view, itemList[position])
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(view: View, book: RetrofitBook)
     }
 }
 
@@ -55,6 +61,4 @@ class LibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val bookCover: ImageView = itemView.book_image
     val progressBar: ProgressBar = itemView.book_image_loading
     val title: TextView = itemView.book_title
-    val synopsis: TextView = itemView.book_description
-    val button: ImageView = itemView.book_go_to_detail_button
 }

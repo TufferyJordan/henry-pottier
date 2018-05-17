@@ -1,7 +1,7 @@
-package com.jordantuffery.henrypottier.view.fragments
+package com.jordantuffery.henrypottier.lifecyle.fragments
 
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.view.base.BaseFragment
+import com.jordantuffery.henrypottier.lifecyle.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_info.github_link_webview
 
 class InfoFragment : BaseFragment() {

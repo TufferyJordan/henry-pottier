@@ -1,6 +1,7 @@
-package com.jordantuffery.henrypottier
+package com.jordantuffery.henrypottier.lifecyle.base
 
 import android.app.Application
+import com.jordantuffery.henrypottier.BuildConfig
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.EventBusException
 import timber.log.Timber

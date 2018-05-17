@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.view.base
+package com.jordantuffery.henrypottier.lifecyle.base
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -22,11 +22,11 @@ abstract class BaseFragment : Fragment(), BaseContext by BaseContextImpl() {
             EventBus.getDefault().register(this)
         } catch (e: EventBusException) {
         }
-        restApiServiceConnector.bind(context!!, connectionHandler = this::onRestApiServiceConnected)
+        dataRequestServiceConnector.bind(context!!, connectionHandler = this::onDataRequestServiceConnected)
     }
 
     override fun onStop() {
-        restApiServiceConnector.unbind(disconnectionHandler = this::onRestApiServiceDisconnected)
+        dataRequestServiceConnector.unbind(disconnectionHandler = this::onDataRequestServiceDisconnected)
         try {
             EventBus.getDefault().unregister(this)
         } catch (e: EventBusException) {

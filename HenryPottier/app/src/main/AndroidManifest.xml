@@ -5,14 +5,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".BaseApplication"
+        android:name=".lifecyle.base.BaseApplication"
         android:allowBackup="true"
         android:icon="@drawable/launcher_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".view.activities.MainActivity"
+            android:name=".lifecyle.activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,12 +21,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".view.activities.BookDetailsActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".lifecyle.activities.BookDetailsActivity" />
 
         <service
-            android:name=".RestApiService"
+            android:name=".lifecyle.DataRequestService"
             android:exported="false" />
 
     </application>
