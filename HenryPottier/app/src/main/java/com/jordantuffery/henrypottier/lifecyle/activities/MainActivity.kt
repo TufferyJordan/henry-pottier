@@ -18,8 +18,6 @@ class MainActivity : BaseActivity() {
     private val libraryFragment = LibraryFragment.newInstance()
     private val shoppingListFragment = ShoppingListFragment.newInstance()
 
-    // private var currentFragment: BaseFragment? = null
-
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_infos -> {
@@ -57,25 +55,8 @@ class MainActivity : BaseActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment_container, fragment)
             .commitAllowingStateLoss()
-
-//        if (fragment == currentFragment) return
-//        supportFragmentManager.beginTransaction().apply {
-//            if (fragment.isAdded) {
-//                when (currentFragment) {
-//                    is InfoFragment -> hide(infoFragment)
-//                    is LibraryFragment -> hide(libraryFragment)
-//                    is ShoppingListFragment -> hide(shoppingListFragment)
-//                }
-//                show(fragment)
-//            } else {
-//                if (currentFragment != null) {
-//                    hide(currentFragment)
-//                }
-//                add(R.id.main_fragment_container, fragment)
-//            }
-//            currentFragment = fragment
-//        }.commitAllowingStateLoss()
     }
+
 
     companion object {
         const val REQUEST_CODE_BOOK_DETAIL_ACTIVITY = 0

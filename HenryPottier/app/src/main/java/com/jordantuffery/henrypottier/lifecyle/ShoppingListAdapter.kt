@@ -1,5 +1,6 @@
 package com.jordantuffery.henrypottier.lifecyle
 
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.jordantuffery.henrypottier.R
+import com.jordantuffery.henrypottier.lifecyle.activities.BookDetailsActivity
 import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
 import kotlinx.android.synthetic.main.item_shopping_list.view.shopping_item_cover
 import kotlinx.android.synthetic.main.item_shopping_list.view.shopping_item_number
@@ -39,6 +41,11 @@ class ShoppingListAdapter(
         holder.number.text = holder.number.resources.getString(R.string.number_of_items).format(
             shoppingList[position].number)
         holder.removeButton.setOnClickListener { listener?.onRemoveItem(it, shoppingList[position].item) }
+        holder.title.rootView.setOnClickListener {
+            val intent = Intent(it.context, BookDetailsActivity::class.java)
+            intent.putExtra(BookDetailsActivity.EXTRA_BOOK_ISBN, shoppingList[position].item.isbn)
+            it.context.startActivity(intent)
+        }
     }
 
     interface OnRemoveItemListener {

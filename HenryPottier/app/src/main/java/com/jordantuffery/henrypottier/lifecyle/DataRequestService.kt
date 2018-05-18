@@ -4,9 +4,11 @@ import android.app.Service
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
+import com.jordantuffery.henrypottier.model.objects.retrofit.Offers
 import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
 import com.jordantuffery.henrypottier.utils.BookDetailEvent
 import com.jordantuffery.henrypottier.utils.ListBooksEvent
+import com.jordantuffery.henrypottier.utils.ListOffersEvent
 import com.jordantuffery.henrypottier.utils.RestInterface
 import com.jordantuffery.henrypottier.utils.RetrofitErrorEvent
 import com.jordantuffery.henrypottier.utils.ServiceConnector
@@ -72,8 +74,38 @@ class DataRequestService : Service(), ShoppingList.OnShoppingListChange {
 
             override fun onResponse(call: Call<List<RetrofitBook>>, response: Response<List<RetrofitBook>>) {
                 val retrofitBook: RetrofitBook? = response.body().find { it.isbn == isbn }
+
                 callback?.invoke(retrofitBook)
                 EventBus.getDefault().postSticky(BookDetailEvent(retrofitBook))
+            }
+        })
+    }
+
+    fun requestOffers(booksToApplyOffers: ShoppingList, callback: ((Offers) -> Unit)? = null) {
+        Timber.e("request offers")
+        if (booksToApplyOffers.isEmpty()) {
+            EventBus.getDefault().post(ListOffersEvent(null))
+            return
+        }
+        val isbnList = booksToApplyOffers.toLitteralList().map { it.isbn }.toTypedArray()
+
+        val isbnString = StringBuilder().apply {
+            for (i in 0 until isbnList.size) {
+                append(isbnList[i])
+                append(',')
+            }
+        }.toString()
+
+        retrofit.getOffers(isbnString).enqueue(object : Callback<Offers> {
+            override fun onFailure(call: Call<Offers>, t: Throwable) {
+                Timber.e(t)
+                EventBus.getDefault().post(RetrofitErrorEvent(t))
+            }
+
+            override fun onResponse(call: Call<Offers>, response: Response<Offers>) {
+                val offers: Offers = response.body()
+                callback?.invoke(offers)
+                EventBus.getDefault().post(ListOffersEvent(offers))
             }
         })
     }
@@ -112,14 +144,24 @@ class ShoppingList(var listener: OnShoppingListChange? = null) : ArrayList<Shopp
             if (indexToRemove != -1) {
                 removeAt(indexToRemove)
             }
-            listener?.onShoppingListChange(this)
         }
+        listener?.onShoppingListChange(this)
+    }
+
+    fun toLitteralList(): ArrayList<RetrofitBook> {
+        val realList: ArrayList<RetrofitBook> = arrayListOf()
+        for (shoppingItem in this) {
+            for (i in 0 until shoppingItem.number) {
+                realList.add(shoppingItem.item)
+            }
+        }
+        return realList
     }
 
     fun sum(): Float {
         var sum: Float = 0f
         forEach {
-            for (i in 0..it.number)
+            for (i in 0 until it.number)
                 sum += it.item.price
         }
         return sum
