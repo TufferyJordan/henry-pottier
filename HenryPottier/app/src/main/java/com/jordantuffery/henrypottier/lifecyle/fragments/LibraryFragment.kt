@@ -41,7 +41,7 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
         dataRequestService?.requestBooks {
             adapter.itemList = it
             adapter.notifyDataSetChanged()
-            if (library_swipe_layout.isRefreshing) {
+            if (library_swipe_layout != null && library_swipe_layout.isRefreshing) {
                 library_swipe_layout.isRefreshing = false
             }
         }
@@ -49,13 +49,11 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
 
     override fun onItemClick(view: View, book: RetrofitBook) {
         val intent = Intent(context, BookDetailsActivity::class.java)
-        intent.putExtra(EXTRA_BOOK_ISBN, book.isbn)
+        intent.putExtra(BookDetailsActivity.EXTRA_BOOK_ISBN, book.isbn)
         activity?.startActivityForResult(intent, MainActivity.REQUEST_CODE_BOOK_DETAIL_ACTIVITY)
     }
 
     companion object {
-        const val EXTRA_BOOK_ISBN = "EXTRA_BOOK_ISBN"
-
         fun newInstance(): LibraryFragment {
             return LibraryFragment()
         }

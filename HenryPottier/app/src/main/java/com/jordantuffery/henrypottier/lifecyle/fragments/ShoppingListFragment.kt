@@ -12,11 +12,13 @@ import com.jordantuffery.henrypottier.lifecyle.ShoppingList
 import com.jordantuffery.henrypottier.lifecyle.ShoppingListAdapter
 import com.jordantuffery.henrypottier.lifecyle.base.BaseFragment
 import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
+import com.jordantuffery.henrypottier.utils.ListOffersEvent
 import com.jordantuffery.henrypottier.utils.ShoppingListChangeEvent
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_recycler_view
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_text_new_price
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_text_old_price
 import org.greenrobot.eventbus.Subscribe
+import timber.log.Timber
 import java.text.NumberFormat
 
 class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemListener {
@@ -38,24 +40,37 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
     @SuppressLint("MissingSuperCall")
     override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
         super.onDataRequestServiceConnected(dataRequestService)
+
+        dataRequestService.requestOffers(dataRequestService.shoppingList)
+
         adapter.apply {
             shoppingList = dataRequestService.shoppingList
             notifyDataSetChanged()
         }
-        shopping_list_text_old_price.text = NumberFormat.getCurrencyInstance().format(
-            dataRequestService.shoppingList.sum())
-        shopping_list_text_new_price.text = NumberFormat.getCurrencyInstance().format(
-            dataRequestService.shoppingList.sum())
     }
 
     @Subscribe
     fun onEvent(event: ShoppingListChangeEvent) {
+
+        dataRequestService?.requestOffers(event.shoppingList)
+
         adapter.apply {
             shoppingList = event.shoppingList
             notifyDataSetChanged()
         }
-        shopping_list_text_old_price.text = NumberFormat.getCurrencyInstance().format(event.shoppingList.sum())
-        shopping_list_text_new_price.text = NumberFormat.getCurrencyInstance().format(event.shoppingList.sum())
+    }
+
+    @Subscribe
+    fun onEvent(event: ListOffersEvent) {
+        Timber.e("received offers")
+        val currency = NumberFormat.getCurrencyInstance()
+        shopping_list_text_old_price.text = currency.format(dataRequestService?.shoppingList?.sum())
+        if (event.list != null) {
+            shopping_list_text_new_price.text = currency.format(
+                event.list.applyOffers(dataRequestService?.shoppingList?.sum()))
+        } else {
+            shopping_list_text_new_price.text = currency.format(dataRequestService?.shoppingList?.sum())
+        }
     }
 
     override fun onRemoveItem(view: View, book: RetrofitBook) {

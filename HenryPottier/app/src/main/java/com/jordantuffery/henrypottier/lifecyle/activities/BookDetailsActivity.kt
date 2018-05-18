@@ -6,7 +6,6 @@ import com.bumptech.glide.Glide
 import com.jordantuffery.henrypottier.R
 import com.jordantuffery.henrypottier.lifecyle.DataRequestService
 import com.jordantuffery.henrypottier.lifecyle.base.BaseActivity
-import com.jordantuffery.henrypottier.lifecyle.fragments.LibraryFragment
 import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
 import com.jordantuffery.henrypottier.utils.BookDetailEvent
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_back
@@ -45,7 +44,7 @@ class BookDetailsActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
         super.onDataRequestServiceConnected(dataRequestService)
-        val isbn = intent.extras.getString(LibraryFragment.EXTRA_BOOK_ISBN)
+        val isbn = intent.extras.getString(EXTRA_BOOK_ISBN)
         dataRequestService.requestBookDetails(isbn)
     }
 
@@ -65,6 +64,8 @@ class BookDetailsActivity : BaseActivity() {
 
 
     companion object {
+        const val EXTRA_BOOK_ISBN = "EXTRA_BOOK_ISBN"
+
         const val RESULT_CODE_ADDED_ITEM_IN_LIST = 0
         const val RESULT_CODE_NONE = 1
     }
