@@ -3,4 +3,4 @@
 ## Disclaimer
 This project is as been done as a test for Xebia. I use it also to test new things.
 ## Description
-THe main purpose is to allow the user to add books to a shopping list and to apply offers to the it.
+The main purpose is to allow the user to add books to a shopping list and to apply offers to the it.
