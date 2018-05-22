@@ -1,7 +1,7 @@
-package com.jordantuffery.henrypottier.lifecyle.base
+package com.jordantuffery.henrypottier.base
 
 import android.support.annotation.CallSuper
-import com.jordantuffery.henrypottier.lifecyle.DataRequestService
+import com.jordantuffery.henrypottier.DataRequestService
 import com.jordantuffery.henrypottier.utils.ServiceConnector
 import timber.log.Timber
 

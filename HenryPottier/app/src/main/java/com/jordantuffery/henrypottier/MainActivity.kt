@@ -1,14 +1,13 @@
-package com.jordantuffery.henrypottier.lifecyle.activities
+package com.jordantuffery.henrypottier
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.lifecyle.base.BaseActivity
-import com.jordantuffery.henrypottier.lifecyle.base.BaseFragment
-import com.jordantuffery.henrypottier.lifecyle.fragments.InfoFragment
-import com.jordantuffery.henrypottier.lifecyle.fragments.LibraryFragment
-import com.jordantuffery.henrypottier.lifecyle.fragments.ShoppingListFragment
+import com.jordantuffery.henrypottier.base.BaseActivity
+import com.jordantuffery.henrypottier.base.BaseFragment
+import com.jordantuffery.henrypottier.info.InfoFragment
+import com.jordantuffery.henrypottier.library.LibraryFragment
+import com.jordantuffery.henrypottier.shoppinglist.ShoppingListFragment
 import kotlinx.android.synthetic.main.activity_main.main_activity_bottom_bar
 
 class MainActivity : BaseActivity() {
@@ -59,7 +58,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        restoreCurrentFragment(savedInstanceState.getInt(EXTRA_CURRENT_FRAGMENT_ID))
+        restoreCurrentFragment(savedInstanceState.getInt(
+            EXTRA_CURRENT_FRAGMENT_ID))
         super.onRestoreInstanceState(savedInstanceState)
     }
 

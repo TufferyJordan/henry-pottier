@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.lifecyle
+package com.jordantuffery.henrypottier.shoppinglist
 
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.jordantuffery.henrypottier.BookDetailsActivity
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.lifecyle.activities.BookDetailsActivity
-import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
+import com.jordantuffery.henrypottier.restapi.Book
 import kotlinx.android.synthetic.main.item_shopping_list.view.shopping_item_cover
 import kotlinx.android.synthetic.main.item_shopping_list.view.shopping_item_number
 import kotlinx.android.synthetic.main.item_shopping_list.view.shopping_item_price
@@ -32,7 +32,8 @@ class ShoppingListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingListViewHolder = ShoppingListViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.item_shopping_list, parent, false))
+        LayoutInflater.from(parent.context).inflate(R.layout.item_shopping_list, parent,
+                                                    false))
 
     override fun onBindViewHolder(holder: ShoppingListViewHolder, position: Int) {
         Glide.with(holder.bookCover).load(shoppingList[position].item.cover).into(holder.bookCover)
@@ -49,7 +50,7 @@ class ShoppingListAdapter(
     }
 
     interface OnRemoveItemListener {
-        fun onRemoveItem(view: View, book: RetrofitBook)
+        fun onRemoveItem(view: View, book: Book)
     }
 }
 

@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.lifecyle.fragments
+package com.jordantuffery.henrypottier.shoppinglist
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.lifecyle.DataRequestService
-import com.jordantuffery.henrypottier.lifecyle.ShoppingList
-import com.jordantuffery.henrypottier.lifecyle.ShoppingListAdapter
-import com.jordantuffery.henrypottier.lifecyle.base.BaseFragment
-import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
+import com.jordantuffery.henrypottier.DataRequestService
 import com.jordantuffery.henrypottier.utils.ListOffersEvent
+import com.jordantuffery.henrypottier.R
+import com.jordantuffery.henrypottier.restapi.Book
 import com.jordantuffery.henrypottier.utils.ShoppingListChangeEvent
+import com.jordantuffery.henrypottier.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_recycler_view
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_text_new_price
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_text_old_price
@@ -25,7 +23,8 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
 
     override val layoutRes: Int = R.layout.fragment_shopping_list
 
-    private val adapter: ShoppingListAdapter = ShoppingListAdapter(ShoppingList()).apply {
+    private val adapter: ShoppingListAdapter = ShoppingListAdapter(
+        ShoppingList()).apply {
         listener = this@ShoppingListFragment
     }
 
@@ -73,7 +72,7 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
         }
     }
 
-    override fun onRemoveItem(view: View, book: RetrofitBook) {
+    override fun onRemoveItem(view: View, book: Book) {
         dataRequestService?.shoppingList?.removeFromShoppingList(book)
     }
 

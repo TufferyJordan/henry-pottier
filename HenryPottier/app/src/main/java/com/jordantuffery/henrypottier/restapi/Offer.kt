@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.model.objects.retrofit
+package com.jordantuffery.henrypottier.restapi
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

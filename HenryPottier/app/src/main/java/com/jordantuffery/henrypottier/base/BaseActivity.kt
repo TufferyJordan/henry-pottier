@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.lifecyle.base
+package com.jordantuffery.henrypottier.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
