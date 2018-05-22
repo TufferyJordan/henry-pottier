@@ -1,12 +1,10 @@
 package com.jordantuffery.henrypottier.library
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.jordantuffery.henrypottier.BookDetailsActivity
-import com.jordantuffery.henrypottier.DataRequestService
 import com.jordantuffery.henrypottier.MainActivity
 import com.jordantuffery.henrypottier.R
 import com.jordantuffery.henrypottier.base.BaseFragment
@@ -31,14 +29,13 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
         }
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
-        super.onDataRequestServiceConnected(dataRequestService)
+    override fun onStart() {
+        super.onStart()
         requestBooks()
     }
 
     private fun requestBooks() {
-        dataRequestService?.requestBooks {
+        presenter?.requestBooks {
             adapter.itemList = it
             adapter.notifyDataSetChanged()
             if (library_swipe_layout != null && library_swipe_layout.isRefreshing) {

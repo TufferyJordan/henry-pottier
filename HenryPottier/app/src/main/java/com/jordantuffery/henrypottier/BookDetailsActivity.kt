@@ -1,10 +1,10 @@
 package com.jordantuffery.henrypottier
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.jordantuffery.henrypottier.base.BaseActivity
 import com.jordantuffery.henrypottier.restapi.Book
+import com.jordantuffery.henrypottier.shoppinglist.ShoppingList
 import com.jordantuffery.henrypottier.utils.BookDetailEvent
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_back
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_cover
@@ -30,7 +30,7 @@ class BookDetailsActivity : BaseActivity() {
         fab_add_shopping_list.setOnClickListener {
             val bookToAdd = mBook
             if (bookToAdd != null) {
-                dataRequestService?.shoppingList?.addToShoppingList(bookToAdd)
+                ShoppingList.addToShoppingList(bookToAdd)
                 setResult(RESULT_CODE_ADDED_ITEM_IN_LIST)
             } else {
                 setResult(RESULT_CODE_NONE)
@@ -39,11 +39,10 @@ class BookDetailsActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
-        super.onDataRequestServiceConnected(dataRequestService)
+    override fun onStart() {
+        super.onStart()
         val isbn = intent.extras.getString(EXTRA_BOOK_ISBN)
-        dataRequestService.requestBookDetails(isbn)
+        presenter?.requestBookDetails(isbn)
     }
 
     @Subscribe(sticky = true)
@@ -59,7 +58,6 @@ class BookDetailsActivity : BaseActivity() {
             }
         }.toString()
     }
-
 
     companion object {
         const val EXTRA_BOOK_ISBN = "EXTRA_BOOK_ISBN"

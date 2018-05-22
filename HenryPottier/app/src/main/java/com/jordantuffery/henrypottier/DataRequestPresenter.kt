@@ -17,6 +17,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 
 class DataRequestPresenterImpl : DataRequestPresenter {
+    override val eventBus: EventBus = EventBus.getDefault()
+
+    override val retrofit: RestInterface = Retrofit.Builder()
+        .baseUrl(DataRequestPresenter.BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(RestInterface::class.java)!!
+
     override fun requestBooks(callback: ((List<Book>) -> Unit)?) {
         retrofit.getBooks().enqueue(object : Callback<List<Book>> {
             override fun onFailure(call: Call<List<Book>>, t: Throwable) {
@@ -75,12 +83,6 @@ class DataRequestPresenterImpl : DataRequestPresenter {
         })
     }
 
-    override val eventBus: EventBus = EventBus.getDefault()
-    override val retrofit: RestInterface = Retrofit.Builder()
-        .baseUrl(DataRequestPresenter.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(RestInterface::class.java)!!
 }
 
 interface DataRequestPresenter {

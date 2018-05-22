@@ -1,22 +1,19 @@
 package com.jordantuffery.henrypottier.shoppinglist
 
-import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.os.Bundle
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.jordantuffery.henrypottier.DataRequestService
-import com.jordantuffery.henrypottier.utils.ListOffersEvent
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.restapi.Book
-import com.jordantuffery.henrypottier.utils.ShoppingListChangeEvent
 import com.jordantuffery.henrypottier.base.BaseFragment
+import com.jordantuffery.henrypottier.restapi.Book
+import com.jordantuffery.henrypottier.utils.ListOffersEvent
+import com.jordantuffery.henrypottier.utils.ShoppingListChangeEvent
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_recycler_view
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_text_new_price
 import kotlinx.android.synthetic.main.fragment_shopping_list.shopping_list_text_old_price
 import org.greenrobot.eventbus.Subscribe
-import timber.log.Timber
 import java.text.NumberFormat
 
 class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemListener {
@@ -24,7 +21,7 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
     override val layoutRes: Int = R.layout.fragment_shopping_list
 
     private val adapter: ShoppingListAdapter = ShoppingListAdapter(
-        ShoppingList()).apply {
+        ShoppingList).apply {
         listener = this@ShoppingListFragment
     }
 
@@ -36,22 +33,19 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
         shopping_list_text_old_price.paintFlags = shopping_list_text_old_price.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
-        super.onDataRequestServiceConnected(dataRequestService)
-
-        dataRequestService.requestOffers(dataRequestService.shoppingList)
+    override fun onStart() {
+        super.onStart()
+        presenter?.requestOffers(ShoppingList)
 
         adapter.apply {
-            shoppingList = dataRequestService.shoppingList
+            shoppingList = ShoppingList
             notifyDataSetChanged()
         }
     }
 
     @Subscribe
     fun onEvent(event: ShoppingListChangeEvent) {
-
-        dataRequestService?.requestOffers(event.shoppingList)
+        presenter?.requestOffers(event.shoppingList)
 
         adapter.apply {
             shoppingList = event.shoppingList
@@ -61,19 +55,18 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
 
     @Subscribe
     fun onEvent(event: ListOffersEvent) {
-        Timber.e("received offers")
         val currency = NumberFormat.getCurrencyInstance()
-        shopping_list_text_old_price.text = currency.format(dataRequestService?.shoppingList?.sum())
+        shopping_list_text_old_price.text = currency.format(ShoppingList.sum())
         if (event.list != null) {
             shopping_list_text_new_price.text = currency.format(
-                event.list.applyOffers(dataRequestService?.shoppingList?.sum()))
+                event.list.applyOffers(ShoppingList.sum()))
         } else {
-            shopping_list_text_new_price.text = currency.format(dataRequestService?.shoppingList?.sum())
+            shopping_list_text_new_price.text = currency.format(ShoppingList.sum())
         }
     }
 
     override fun onRemoveItem(view: View, book: Book) {
-        dataRequestService?.shoppingList?.removeFromShoppingList(book)
+        ShoppingList.removeFromShoppingList(book)
     }
 
     companion object {

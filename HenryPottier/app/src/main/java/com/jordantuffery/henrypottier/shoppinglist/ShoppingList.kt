@@ -1,10 +1,11 @@
 package com.jordantuffery.henrypottier.shoppinglist
 
 import com.jordantuffery.henrypottier.restapi.Book
+import com.jordantuffery.henrypottier.utils.ShoppingListChangeEvent
+import org.greenrobot.eventbus.EventBus
 
 
-class ShoppingList(var listener: OnShoppingListChange? = null) : ArrayList<ShoppingList.ShoppingItem>() {
-
+object ShoppingList : ArrayList<ShoppingList.ShoppingItem>() {
     fun addToShoppingList(itemToAdd: Book) {
         if (map { it.item.isbn }.contains(itemToAdd.isbn)) {
             forEach {
@@ -13,7 +14,8 @@ class ShoppingList(var listener: OnShoppingListChange? = null) : ArrayList<Shopp
         } else {
             add(ShoppingItem(itemToAdd, 1))
         }
-        listener?.onShoppingListChange(this)
+        EventBus.getDefault().post(ShoppingListChangeEvent(this))
+
     }
 
     @Synchronized
@@ -33,7 +35,7 @@ class ShoppingList(var listener: OnShoppingListChange? = null) : ArrayList<Shopp
                 removeAt(indexToRemove)
             }
         }
-        listener?.onShoppingListChange(this)
+        EventBus.getDefault().post(ShoppingListChangeEvent(this))
     }
 
     fun toLitteralList(): ArrayList<Book> {
@@ -55,9 +57,6 @@ class ShoppingList(var listener: OnShoppingListChange? = null) : ArrayList<Shopp
         return sum
     }
 
-    interface OnShoppingListChange {
-        fun onShoppingListChange(newList: ShoppingList)
-    }
 
     class ShoppingItem(val item: Book, var number: Int)
 }

@@ -2,18 +2,22 @@ package com.jordantuffery.henrypottier.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.jordantuffery.henrypottier.DataRequestPresenter
+import com.jordantuffery.henrypottier.DataRequestPresenterImpl
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.EventBusException
 import timber.log.Timber
 
-abstract class BaseActivity : AppCompatActivity(), BaseContext by BaseContextImpl() {
+abstract class BaseActivity : AppCompatActivity() {
     abstract val layoutRes: Int
+
+    protected var presenter: DataRequestPresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("${javaClass.simpleName} is created")
         setContentView(layoutRes)
-        dataRequestServiceConnector.bind(this, connectionHandler = this::onDataRequestServiceConnected)
+        presenter = DataRequestPresenterImpl()
     }
 
     override fun onStart() {
@@ -35,8 +39,7 @@ abstract class BaseActivity : AppCompatActivity(), BaseContext by BaseContextImp
     }
 
     override fun onDestroy() {
-        dataRequestServiceConnector.unbind(disconnectionHandler = this::onDataRequestServiceDisconnected)
-
+        presenter = null
         Timber.d("${javaClass.simpleName} is destroyed")
         super.onDestroy()
     }
