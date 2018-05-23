@@ -1,18 +1,25 @@
 package com.jordantuffery.henrypottier
 
 import android.os.Bundle
+import android.view.View
 import com.bumptech.glide.Glide
 import com.jordantuffery.henrypottier.base.BaseActivity
 import com.jordantuffery.henrypottier.restapi.Book
-import com.jordantuffery.henrypottier.shoppinglist.ShoppingList
+import com.jordantuffery.henrypottier.shoppinglist.ShoppingModel
 import com.jordantuffery.henrypottier.utils.BookDetailEvent
+import com.jordantuffery.henrypottier.utils.ConnectivityChangeEvent
+import com.jordantuffery.henrypottier.utils.RetrofitErrorEvent
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_back
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_cover
+import kotlinx.android.synthetic.main.activity_book_details.book_detail_no_connection_image
+import kotlinx.android.synthetic.main.activity_book_details.book_detail_no_connection_layout
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_price
+import kotlinx.android.synthetic.main.activity_book_details.book_detail_scroll_view
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_synopsis
 import kotlinx.android.synthetic.main.activity_book_details.book_detail_title
 import kotlinx.android.synthetic.main.activity_book_details.fab_add_shopping_list
 import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.lang.StringBuilder
 import java.text.NumberFormat
 
@@ -57,6 +64,35 @@ class BookDetailsActivity : BaseActivity() {
                 append("\n")
             }
         }.toString()
+    }
+
+    @Subscribe
+    fun onEvent(event: RetrofitErrorEvent) {
+        updateUI(false)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: ConnectivityChangeEvent) {
+        updateUI(event.connected)
+    }
+
+
+    private fun updateUI(withConnection: Boolean?) {
+        if (withConnection == null) return
+        if (withConnection) {
+            book_detail_scroll_view.visibility = View.VISIBLE
+            fab_add_shopping_list.visibility = View.VISIBLE
+            book_detail_no_connection_layout.visibility = View.GONE
+        } else {
+            book_detail_scroll_view.visibility = View.GONE
+            fab_add_shopping_list.visibility = View.GONE
+            book_detail_no_connection_layout.visibility = View.VISIBLE
+            book_detail_no_connection_image.setOnClickListener {
+                presenter?.requestBooks {
+                    updateUI(true)
+                }
+            }
+        }
     }
 
     companion object {

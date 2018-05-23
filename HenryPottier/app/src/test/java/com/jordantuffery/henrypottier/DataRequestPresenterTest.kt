@@ -1,14 +1,8 @@
 package com.jordantuffery.henrypottier
 
-import android.util.Log
 import com.jordantuffery.henrypottier.restapi.Book
 import com.jordantuffery.henrypottier.shoppinglist.ShoppingList
-import com.jordantuffery.henrypottier.utils.ListBooksEvent
 import junit.framework.Assert
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

@@ -15,7 +15,7 @@ class InfoFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        github_link_webview.loadUrl("https://github.com/TufferyJordan/henry-pottier")
+        github_link_webview.loadUrl("https://github.com/TufferyJordan/henry-pottier/blob/master/README.md")
     }
 
     override fun onStop() {

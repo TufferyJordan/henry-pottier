@@ -6,7 +6,6 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.ShoppingModel
 import com.jordantuffery.henrypottier.base.BaseFragment
 import com.jordantuffery.henrypottier.restapi.Book
 import com.jordantuffery.henrypottier.utils.ListOffersEvent
@@ -62,7 +61,8 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
             shopping_list_text_new_price.text = currency.format(
                 event.list.applyOffers(ShoppingModel.shoppingList.sum()))
         } else {
-            shopping_list_text_new_price.text = currency.format(ShoppingModel.shoppingList.sum())
+            shopping_list_text_new_price.text = currency.format(
+                ShoppingModel.shoppingList.sum())
         }
     }
 

@@ -7,6 +7,7 @@
     android:fitsSystemWindows="true">
 
     <ScrollView
+        android:id="@+id/book_detail_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -14,16 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/backgroundColor">
-
-            <ImageView
-                android:id="@+id/book_detail_back"
-                android:layout_width="@dimen/back_button_size"
-                android:layout_height="@dimen/back_button_size"
-                android:layout_margin="@dimen/middle_gap"
-                android:rotation="180"
-                android:src="@drawable/ic_chevron_right"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/book_detail_cover"
@@ -106,6 +97,38 @@
             </android.support.v7.widget.CardView>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/book_detail_no_connection_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/book_detail_no_connection_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_signal_wifi_off" />
+
+        <TextView
+            android:id="@+id/book_detail_no_connection_text"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_internet_connection" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/book_detail_back"
+        android:layout_width="@dimen/back_button_size"
+        android:layout_height="@dimen/back_button_size"
+        android:layout_gravity="start|top"
+        android:layout_margin="@dimen/middle_gap"
+        android:rotation="180"
+        android:src="@drawable/ic_chevron_right" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add_shopping_list"

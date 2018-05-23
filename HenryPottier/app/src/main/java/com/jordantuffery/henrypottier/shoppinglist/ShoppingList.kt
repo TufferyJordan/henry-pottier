@@ -6,9 +6,9 @@ import org.greenrobot.eventbus.EventBus
 
 class ShoppingList(initializer: Array<Book?>? = null) : ArrayList<ShoppingList.ShoppingItem>() {
     init {
-        if(initializer != null) {
+        if (initializer != null) {
             for (book in initializer) {
-                if(book != null) {
+                if (book != null) {
                     addToShoppingList(book)
                 }
             }

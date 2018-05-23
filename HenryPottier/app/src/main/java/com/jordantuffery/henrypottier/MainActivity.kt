@@ -3,34 +3,36 @@ package com.jordantuffery.henrypottier
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.view.View
 import com.jordantuffery.henrypottier.base.BaseActivity
 import com.jordantuffery.henrypottier.base.BaseFragment
 import com.jordantuffery.henrypottier.info.InfoFragment
 import com.jordantuffery.henrypottier.library.LibraryFragment
 import com.jordantuffery.henrypottier.shoppinglist.ShoppingListFragment
+import com.jordantuffery.henrypottier.utils.ConnectivityChangeEvent
+import com.jordantuffery.henrypottier.utils.RetrofitErrorEvent
 import kotlinx.android.synthetic.main.activity_main.main_activity_bottom_bar
+import kotlinx.android.synthetic.main.activity_main.main_activity_no_connection_image
+import kotlinx.android.synthetic.main.activity_main.main_activity_no_connection_layout
+import kotlinx.android.synthetic.main.activity_main.main_fragment_container
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class MainActivity : BaseActivity() {
     override val layoutRes: Int = R.layout.activity_main
 
-    private val infoFragment = InfoFragment.newInstance()
-    private val libraryFragment = LibraryFragment.newInstance()
-    private val shoppingListFragment = ShoppingListFragment.newInstance()
-
-    private var currentFragmentId: Int? = null
-
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_infos -> {
-                goToFragment(infoFragment)
+                goToFragment(InfoFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_library -> {
-                goToFragment(libraryFragment)
+                goToFragment(LibraryFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_shopping_list -> {
-                goToFragment(shoppingListFragment)
+                goToFragment(ShoppingListFragment.newInstance())
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -53,13 +55,13 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(EXTRA_CURRENT_FRAGMENT_ID, currentFragmentId!!)
+        outState.putInt(EXTRA_CURRENT_NAVIGATION_ID, main_activity_bottom_bar.selectedItemId)
         super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        restoreCurrentFragment(savedInstanceState.getInt(
-            EXTRA_CURRENT_FRAGMENT_ID))
+        main_activity_bottom_bar.selectedItemId = savedInstanceState.getInt(
+            EXTRA_CURRENT_NAVIGATION_ID)
         super.onRestoreInstanceState(savedInstanceState)
     }
 
@@ -67,30 +69,40 @@ class MainActivity : BaseActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment_container, fragment)
             .commitAllowingStateLoss()
-        currentFragmentId = getCurrentFragmentId(fragment)
     }
 
-    private fun getCurrentFragmentId(fragment: BaseFragment): Int = when (fragment) {
-        infoFragment -> ID_FRAGMENT_INFO
-        libraryFragment -> ID_FRAGMENT_LIBRARY
-        else -> ID_FRAGMENT_SHOPPING_LIST
+    @Subscribe
+    fun onEvent(event: RetrofitErrorEvent) {
+        updateUI(false)
     }
 
-    private fun restoreCurrentFragment(id: Int) {
-        when (id) {
-            ID_FRAGMENT_INFO -> main_activity_bottom_bar.selectedItemId = R.id.navigation_infos
-            ID_FRAGMENT_LIBRARY -> main_activity_bottom_bar.selectedItemId = R.id.navigation_library
-            else -> main_activity_bottom_bar.selectedItemId = R.id.navigation_shopping_list
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: ConnectivityChangeEvent) {
+        updateUI(event.connected)
+    }
+
+    private fun updateUI(withConnection: Boolean?) {
+        if (withConnection == null) return
+        if (withConnection) {
+            main_activity_bottom_bar.selectedItemId = main_activity_bottom_bar.selectedItemId
+            main_fragment_container.visibility = View.VISIBLE
+            main_activity_bottom_bar.isEnabled = true
+            main_activity_no_connection_layout.visibility = View.GONE
+        } else {
+            main_fragment_container.visibility = View.GONE
+            main_activity_bottom_bar.isEnabled = false
+            main_activity_no_connection_layout.visibility = View.VISIBLE
+            main_activity_no_connection_image.setOnClickListener {
+                presenter?.requestBooks {
+                    updateUI(true)
+                }
+            }
         }
     }
 
     companion object {
         const val REQUEST_CODE_BOOK_DETAIL_ACTIVITY = 0
 
-        private const val EXTRA_CURRENT_FRAGMENT_ID = "EXTRA_CURRENT_FRAGMENT_ID"
-
-        private const val ID_FRAGMENT_INFO = 0
-        private const val ID_FRAGMENT_LIBRARY = 1
-        private const val ID_FRAGMENT_SHOPPING_LIST = 2
+        private const val EXTRA_CURRENT_NAVIGATION_ID = "EXTRA_CURRENT_NAVIGATION_ID"
     }
 }
