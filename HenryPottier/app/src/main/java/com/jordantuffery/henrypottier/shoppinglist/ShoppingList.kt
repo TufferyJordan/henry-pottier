@@ -4,8 +4,17 @@ import com.jordantuffery.henrypottier.restapi.Book
 import com.jordantuffery.henrypottier.utils.ShoppingListChangeEvent
 import org.greenrobot.eventbus.EventBus
 
+class ShoppingList(initializer: Array<Book?>? = null) : ArrayList<ShoppingList.ShoppingItem>() {
+    init {
+        if(initializer != null) {
+            for (book in initializer) {
+                if(book != null) {
+                    addToShoppingList(book)
+                }
+            }
+        }
+    }
 
-object ShoppingList : ArrayList<ShoppingList.ShoppingItem>() {
     fun addToShoppingList(itemToAdd: Book) {
         if (map { it.item.isbn }.contains(itemToAdd.isbn)) {
             forEach {
@@ -15,7 +24,6 @@ object ShoppingList : ArrayList<ShoppingList.ShoppingItem>() {
             add(ShoppingItem(itemToAdd, 1))
         }
         EventBus.getDefault().post(ShoppingListChangeEvent(this))
-
     }
 
     @Synchronized

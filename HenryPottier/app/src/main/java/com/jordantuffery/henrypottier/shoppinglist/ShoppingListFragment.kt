@@ -6,6 +6,7 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.jordantuffery.henrypottier.R
+import com.jordantuffery.henrypottier.ShoppingModel
 import com.jordantuffery.henrypottier.base.BaseFragment
 import com.jordantuffery.henrypottier.restapi.Book
 import com.jordantuffery.henrypottier.utils.ListOffersEvent
@@ -21,7 +22,7 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
     override val layoutRes: Int = R.layout.fragment_shopping_list
 
     private val adapter: ShoppingListAdapter = ShoppingListAdapter(
-        ShoppingList).apply {
+        ShoppingModel.shoppingList).apply {
         listener = this@ShoppingListFragment
     }
 
@@ -35,10 +36,10 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
 
     override fun onStart() {
         super.onStart()
-        presenter?.requestOffers(ShoppingList)
+        presenter?.requestOffers(ShoppingModel.shoppingList)
 
         adapter.apply {
-            shoppingList = ShoppingList
+            shoppingList = ShoppingModel.shoppingList
             notifyDataSetChanged()
         }
     }
@@ -56,17 +57,17 @@ class ShoppingListFragment : BaseFragment(), ShoppingListAdapter.OnRemoveItemLis
     @Subscribe
     fun onEvent(event: ListOffersEvent) {
         val currency = NumberFormat.getCurrencyInstance()
-        shopping_list_text_old_price.text = currency.format(ShoppingList.sum())
+        shopping_list_text_old_price.text = currency.format(ShoppingModel.shoppingList.sum())
         if (event.list != null) {
             shopping_list_text_new_price.text = currency.format(
-                event.list.applyOffers(ShoppingList.sum()))
+                event.list.applyOffers(ShoppingModel.shoppingList.sum()))
         } else {
-            shopping_list_text_new_price.text = currency.format(ShoppingList.sum())
+            shopping_list_text_new_price.text = currency.format(ShoppingModel.shoppingList.sum())
         }
     }
 
     override fun onRemoveItem(view: View, book: Book) {
-        ShoppingList.removeFromShoppingList(book)
+        ShoppingModel.shoppingList.removeFromShoppingList(book)
     }
 
     companion object {

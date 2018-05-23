@@ -19,7 +19,7 @@ import java.text.NumberFormat
 class BookDetailsActivity : BaseActivity() {
     override val layoutRes: Int = R.layout.activity_book_details
 
-    var mBook: Book? = null
+    private var mBook: Book? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class BookDetailsActivity : BaseActivity() {
         fab_add_shopping_list.setOnClickListener {
             val bookToAdd = mBook
             if (bookToAdd != null) {
-                ShoppingList.addToShoppingList(bookToAdd)
+                ShoppingModel.shoppingList.addToShoppingList(bookToAdd)
                 setResult(RESULT_CODE_ADDED_ITEM_IN_LIST)
             } else {
                 setResult(RESULT_CODE_NONE)

@@ -3,17 +3,19 @@ package com.jordantuffery.henrypottier.restapi
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Offers(@SerializedName("offers") val offers: List<Offer>) {
+class Offers(@SerializedName("offers")val offers: List<Offer>) {
     fun applyOffers(sum: Float?): Float {
         if (sum == null) return 0f
         var result = sum
         for (offer in offers) {
             when (offer.type) {
                 OfferType.PERCENTAGE -> {
-                    result *= 1 - offer.value / 100f
+                    result -= sum - sum * (1 - offer.value / 100f)
                 }
                 OfferType.MINUS -> {
-                    result -= offer.value
+                    if(result >= offer.value) {
+                        result -= offer.value
+                    }
                 }
                 OfferType.SLICE -> {
                     if (offer.sliceValue != null) {
@@ -29,7 +31,7 @@ class Offers(@SerializedName("offers") val offers: List<Offer>) {
     }
 }
 
-class Offer(@Expose val type: OfferType,
+data class Offer(@Expose val type: OfferType,
             @Expose val sliceValue: Int?,
             @Expose val value: Int)
 

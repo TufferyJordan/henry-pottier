@@ -1,10 +1,13 @@
 package com.jordantuffery.henrypottier.library
 
+import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.jordantuffery.henrypottier.BookDetailsActivity
+import com.jordantuffery.henrypottier.BuildConfig
 import com.jordantuffery.henrypottier.MainActivity
 import com.jordantuffery.henrypottier.R
 import com.jordantuffery.henrypottier.base.BaseFragment
@@ -21,7 +24,12 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         library_recycler_view.adapter = adapter
-        library_recycler_view.layoutManager = GridLayoutManager(context, 2)
+        library_recycler_view.layoutManager =
+            if(activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                GridLayoutManager(context, 5)
+            } else {
+                GridLayoutManager(context, 2)
+            }
 
         library_swipe_layout.setOnRefreshListener {
             library_swipe_layout.isRefreshing = true
