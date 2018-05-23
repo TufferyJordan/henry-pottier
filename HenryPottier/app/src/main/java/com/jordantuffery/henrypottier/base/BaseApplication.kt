@@ -1,4 +1,4 @@
-package com.jordantuffery.henrypottier.lifecyle.base
+package com.jordantuffery.henrypottier.base
 
 import android.app.Application
 import com.jordantuffery.henrypottier.BuildConfig

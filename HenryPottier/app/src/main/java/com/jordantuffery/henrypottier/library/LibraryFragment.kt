@@ -1,17 +1,17 @@
-package com.jordantuffery.henrypottier.lifecyle.fragments
+package com.jordantuffery.henrypottier.library
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import com.jordantuffery.henrypottier.BookDetailsActivity
+import com.jordantuffery.henrypottier.BuildConfig
+import com.jordantuffery.henrypottier.MainActivity
 import com.jordantuffery.henrypottier.R
-import com.jordantuffery.henrypottier.lifecyle.DataRequestService
-import com.jordantuffery.henrypottier.lifecyle.LibraryAdapter
-import com.jordantuffery.henrypottier.lifecyle.activities.BookDetailsActivity
-import com.jordantuffery.henrypottier.lifecyle.activities.MainActivity
-import com.jordantuffery.henrypottier.lifecyle.base.BaseFragment
-import com.jordantuffery.henrypottier.model.objects.retrofit.RetrofitBook
+import com.jordantuffery.henrypottier.base.BaseFragment
+import com.jordantuffery.henrypottier.restapi.Book
 import kotlinx.android.synthetic.main.fragment_library.library_recycler_view
 import kotlinx.android.synthetic.main.fragment_library.library_swipe_layout
 
@@ -19,11 +19,17 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
 
     override val layoutRes: Int = R.layout.fragment_library
 
-    private val adapter: LibraryAdapter = LibraryAdapter(ArrayList(0)).apply { listener = this@LibraryFragment }
+    private val adapter: LibraryAdapter = LibraryAdapter(
+        ArrayList(0)).apply { listener = this@LibraryFragment }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         library_recycler_view.adapter = adapter
-        library_recycler_view.layoutManager = GridLayoutManager(context, 2)
+        library_recycler_view.layoutManager =
+            if(activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                GridLayoutManager(context, 5)
+            } else {
+                GridLayoutManager(context, 2)
+            }
 
         library_swipe_layout.setOnRefreshListener {
             library_swipe_layout.isRefreshing = true
@@ -31,14 +37,13 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
         }
     }
 
-    @SuppressLint("MissingSuperCall")
-    override fun onDataRequestServiceConnected(dataRequestService: DataRequestService) {
-        super.onDataRequestServiceConnected(dataRequestService)
+    override fun onStart() {
+        super.onStart()
         requestBooks()
     }
 
     private fun requestBooks() {
-        dataRequestService?.requestBooks {
+        presenter?.requestBooks {
             adapter.itemList = it
             adapter.notifyDataSetChanged()
             if (library_swipe_layout != null && library_swipe_layout.isRefreshing) {
@@ -47,10 +52,11 @@ class LibraryFragment : BaseFragment(), LibraryAdapter.OnItemClickListener {
         }
     }
 
-    override fun onItemClick(view: View, book: RetrofitBook) {
+    override fun onItemClick(view: View, book: Book) {
         val intent = Intent(context, BookDetailsActivity::class.java)
         intent.putExtra(BookDetailsActivity.EXTRA_BOOK_ISBN, book.isbn)
-        activity?.startActivityForResult(intent, MainActivity.REQUEST_CODE_BOOK_DETAIL_ACTIVITY)
+        activity?.startActivityForResult(intent,
+                                         MainActivity.REQUEST_CODE_BOOK_DETAIL_ACTIVITY)
     }
 
     companion object {
