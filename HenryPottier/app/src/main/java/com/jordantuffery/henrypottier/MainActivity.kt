@@ -1,12 +1,6 @@
 package com.jordantuffery.henrypottier
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.View
@@ -15,13 +9,14 @@ import com.jordantuffery.henrypottier.base.BaseFragment
 import com.jordantuffery.henrypottier.info.InfoFragment
 import com.jordantuffery.henrypottier.library.LibraryFragment
 import com.jordantuffery.henrypottier.shoppinglist.ShoppingListFragment
+import com.jordantuffery.henrypottier.utils.ConnectivityChangeEvent
 import com.jordantuffery.henrypottier.utils.RetrofitErrorEvent
 import kotlinx.android.synthetic.main.activity_main.main_activity_bottom_bar
 import kotlinx.android.synthetic.main.activity_main.main_activity_no_connection_image
 import kotlinx.android.synthetic.main.activity_main.main_activity_no_connection_layout
 import kotlinx.android.synthetic.main.activity_main.main_fragment_container
 import org.greenrobot.eventbus.Subscribe
-import timber.log.Timber
+import org.greenrobot.eventbus.ThreadMode
 
 class MainActivity : BaseActivity() {
     override val layoutRes: Int = R.layout.activity_main
@@ -44,31 +39,10 @@ class MainActivity : BaseActivity() {
         false
     }
 
-    private val receiver = object: BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when(intent?.action) {
-                ConnectivityManager.CONNECTIVITY_ACTION, WifiManager.NETWORK_STATE_CHANGED_ACTION-> {
-                    val cm = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                    val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
-                    updateUI(activeNetwork?.isConnectedOrConnecting)
-                }
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         main_activity_bottom_bar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
         main_activity_bottom_bar.selectedItemId = R.id.navigation_library
-        registerReceiver(receiver, IntentFilter().apply {
-            addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-            addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
-        })
-    }
-
-    override fun onDestroy() {
-        unregisterReceiver(receiver)
-        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -102,9 +76,14 @@ class MainActivity : BaseActivity() {
         updateUI(false)
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: ConnectivityChangeEvent) {
+        updateUI(event.connected)
+    }
+
     private fun updateUI(withConnection: Boolean?) {
-        if(withConnection == null) return
-        if(withConnection) {
+        if (withConnection == null) return
+        if (withConnection) {
             main_activity_bottom_bar.selectedItemId = main_activity_bottom_bar.selectedItemId
             main_fragment_container.visibility = View.VISIBLE
             main_activity_bottom_bar.isEnabled = true

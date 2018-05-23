@@ -12,3 +12,4 @@ class ListOffersEvent(val list: Offers?)
 class ShoppingListChangeEvent(val shoppingList: ShoppingList)
 
 class RetrofitErrorEvent(val t: Throwable)
+class ConnectivityChangeEvent(val connected: Boolean?)

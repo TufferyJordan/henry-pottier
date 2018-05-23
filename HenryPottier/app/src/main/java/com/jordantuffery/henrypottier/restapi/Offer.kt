@@ -3,7 +3,7 @@ package com.jordantuffery.henrypottier.restapi
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Offers(@SerializedName("offers")val offers: List<Offer>) {
+class Offers(@SerializedName("offers") val offers: List<Offer>) {
     fun applyOffers(sum: Float?): Float {
         if (sum == null) return 0f
         var result = sum
@@ -13,7 +13,7 @@ class Offers(@SerializedName("offers")val offers: List<Offer>) {
                     result -= sum - sum * (1 - offer.value / 100f)
                 }
                 OfferType.MINUS -> {
-                    if(result >= offer.value) {
+                    if (result >= offer.value) {
                         result -= offer.value
                     }
                 }
@@ -32,8 +32,8 @@ class Offers(@SerializedName("offers")val offers: List<Offer>) {
 }
 
 data class Offer(@Expose val type: OfferType,
-            @Expose val sliceValue: Int?,
-            @Expose val value: Int)
+                 @Expose val sliceValue: Int?,
+                 @Expose val value: Int)
 
 enum class OfferType {
     @SerializedName("percentage")
